@@ -39,6 +39,17 @@ JOIN Customers C
 ON O.CustomerID = C.CustomerID;
 SELECT * FROM PaymentReport;
 
+-- 4: Sales Summary
+CREATE VIEW SalesSummary AS
+SELECT
+    DATE(OrderDate) AS SalesDate,
+    COUNT(OrderID) AS TotalOrders,
+    SUM(TotalAmount) AS TotalRevenue
+FROM Orders
+GROUP BY DATE(OrderDate);
+
+SELECT * FROM SalesSummary;
+
 -- 2: Stored Procedures
 -- 1: Get Customer Orders
 DELIMITER $$
@@ -71,6 +82,40 @@ END$$
 DELIMITER ;
 CALL GetMenuByCategory(2);
 
+-- 3: Get Total Revenue
+DELIMITER $$
+
+CREATE PROCEDURE GetTotalRevenue()
+BEGIN
+    SELECT
+        SUM(TotalAmount) AS TotalRevenue
+    FROM Orders;
+END $$
+
+DELIMITER ;
+
+CALL GetTotalRevenue();
+
+-- 3: Top Selling Items
+DELIMITER $$
+
+CREATE PROCEDURE GetTopSellingItems()
+BEGIN
+    SELECT
+        M.ItemName,
+        SUM(OD.Quantity) AS QuantitySold
+    FROM MenuItems M
+    JOIN OrderDetails OD
+        ON M.ItemID = OD.ItemID
+    GROUP BY M.ItemID, M.ItemName
+    ORDER BY QuantitySold DESC
+    LIMIT 5;
+END $$
+
+DELIMITER ;
+
+CALL GetTopSellingItems();
+
 -- 3: Triggers
 -- 1: Prevent Negative Prices
 DELIMITER $$
@@ -91,24 +136,38 @@ INSERT INTO MenuItems
 VALUES
 ('Invalid Food',1,-100);
 
--- 2: Auto-update Table Status
+-- 2. Auto-update Order table
 DELIMITER $$
 
-CREATE TRIGGER UpdateTableStatus
-AFTER INSERT ON Orders
+CREATE TRIGGER UpdateOrderTotal
+AFTER INSERT ON OrderDetails
 FOR EACH ROW
 BEGIN
-    UPDATE RestaurantTables
-    SET Status='Occupied'
-    WHERE TableID=NEW.TableID;
-END$$
+    UPDATE Orders
+    SET TotalAmount =
+    (
+        SELECT SUM(Subtotal)
+        FROM OrderDetails
+        WHERE OrderID = NEW.OrderID
+    )
+    WHERE OrderID = NEW.OrderID;
+END $$
 
 DELIMITER ;
 INSERT INTO Orders
-(CustomerID, EmployeeID, TableID, TotalAmount)
+(CustomerID, EmployeeID, TableID)
 VALUES
-(1,3,2,500);
-SELECT * FROM RestaurantTables;
+(1,3,1);
+
+INSERT INTO OrderDetails
+(OrderID, ItemID, Quantity, Subtotal)
+VALUES
+(LAST_INSERT_ID(),6,2,640);
+
+SELECT OrderID, TotalAmount
+FROM Orders
+ORDER BY OrderID DESC
+LIMIT 1;
 
 -- 4: Indexes
 -- Index on Customer Phone
@@ -120,7 +179,11 @@ ON MenuItems(ItemName);
 -- Index on Order Date
 CREATE INDEX idx_order_date
 ON Orders(OrderDate);
+-- 4: Index on Customer ID in Orders
+CREATE INDEX idx_order_customer
+ON Orders(CustomerID);
 SHOW INDEX FROM Customers;
+SHOW INDEX FROM Orders;
 
 -- 5: Transactions
 START TRANSACTION;
