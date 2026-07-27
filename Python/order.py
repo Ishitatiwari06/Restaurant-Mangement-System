@@ -46,7 +46,7 @@ def place_order():
             print("Invalid Customer ID")
             return
 
-
+        # available table
         cursor.execute("""
             SELECT TableID, Capacity
             FROM RestaurantTables
@@ -81,7 +81,7 @@ def place_order():
             print("Invalid Table")
             return
 
-
+        # select waiter 
         cursor.execute("""
             SELECT EmployeeID, EmployeeName
             FROM Employees
@@ -112,7 +112,7 @@ def place_order():
             print("Invalid Waiter")
             return
 
-
+        # display menu
         cursor.execute("""
             SELECT
                 M.ItemID,
@@ -242,7 +242,7 @@ def place_order():
         print("-" * 60)
         print("Total Bill :", total_amount)
 
-
+        # insert new order into order table
         cursor.execute("""
             INSERT INTO Orders
             (
@@ -262,9 +262,9 @@ def place_order():
             total_amount
         ))
 
-        order_id = cursor.lastrowid
+        order_id = cursor.lastrowid #returns the value of the auto-generated primary key
 
-
+        # insert order in orderdetails
         for item in order_items:
 
             cursor.execute("""
@@ -291,6 +291,40 @@ def place_order():
             SET Status='Occupied'
             WHERE TableID=%s
         """, (table_id,))
+
+        print("\nPayment Methods")
+        print("1. Cash")
+        print("2. Card")
+        print("3. UPI")
+
+        payment_choice = input("\nSelect Payment Method : ")
+
+        if payment_choice == "1":
+            payment_method = "Cash"
+
+        elif payment_choice == "2":
+            payment_method = "Card"
+
+        elif payment_choice == "3":
+            payment_method = "UPI"
+
+        else:
+            payment_method = "Cash"
+
+        cursor.execute("""
+        INSERT INTO Payments
+        (
+            OrderID,
+            PaymentMethod,
+            PaymentStatus
+        )
+        VALUES
+        (%s,%s,'Pending')
+        """,
+        (
+            order_id,
+            payment_method
+        ))
 
         conn.commit()
 
