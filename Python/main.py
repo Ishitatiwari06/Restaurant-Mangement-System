@@ -1,5 +1,6 @@
 from customer import *
 from menu import *
+from order import *
 
 def customer_menu():
 
@@ -77,6 +78,44 @@ def menu_menu():
         else:
             print("Invalid Choice!")
 
+def order_menu():
+
+    while True:
+
+        print("\n" + "=" * 50)
+        print("          ORDER MANAGEMENT")
+        print("=" * 50)
+
+        print("1. Place Order")
+        print("2. View Orders")
+        print("3. Search Order")
+        print("4. Update Order Status")
+        print("5. Delete Order")
+        print("6. Back")
+
+        choice = input("\nEnter your choice : ")
+
+        if choice == "1":
+            place_order()
+
+        elif choice == "2":
+            view_orders()
+
+        elif choice == "3":
+            search_order()
+
+        elif choice == "4":
+            update_order_status()
+
+        elif choice == "5":
+            delete_order()
+
+        elif choice == "6":
+            break
+
+        else:
+            print("Invalid Choice!")
+
 
 def main():
 
@@ -102,7 +141,7 @@ def main():
             menu_menu()
 
         elif choice == "3":
-            print("Order Module Coming Soon...")
+            order_menu()
 
         elif choice == "4":
             print("Payment Module Coming Soon...")
