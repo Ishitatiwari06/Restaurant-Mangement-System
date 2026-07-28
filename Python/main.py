@@ -2,6 +2,7 @@ from customer import *
 from menu import *
 from order import *
 from payment import *
+from reports import *
 
 def customer_menu():
 
@@ -151,6 +152,44 @@ def payment_menu():
         else:
             print("Invalid Choice!")
 
+def report_menu():
+
+    while True:
+
+        print("\n" + "=" * 55)
+        print("            REPORTS")
+        print("=" * 55)
+
+        print("1. Customer Order Summary")
+        print("2. Menu Report")
+        print("3. Payment Report")
+        print("4. Top 5 Customers")
+        print("5. Total Revenue")
+        print("6. Back")
+
+        choice = input("\nEnter Choice : ")
+
+        if choice == "1":
+            customer_order_summary()
+
+        elif choice == "2":
+            menu_report()
+
+        elif choice == "3":
+            payment_report()
+
+        elif choice == "4":
+            top_customers()
+
+        elif choice == "5":
+            total_revenue()
+
+        elif choice == "6":
+            break
+
+        else:
+            print("Invalid Choice")
+
 def main():
 
     while True:
@@ -181,7 +220,7 @@ def main():
             payment_menu()
 
         elif choice == "5":
-            print("Reports Module Coming Soon...")
+            report_menu()
 
         elif choice == "6":
             print("\nThank you for using Restaurant Management System!")
