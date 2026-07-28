@@ -163,9 +163,11 @@ def report_menu():
         print("1. Customer Order Summary")
         print("2. Menu Report")
         print("3. Payment Report")
-        print("4. Top 5 Customers")
-        print("5. Total Revenue")
-        print("6. Back")
+        print("4. Sales Summary")
+        print("5. Top Selling Items")
+        print("6. Top 5 Customers")
+        print("7. Total Revenue")
+        print("8. Back")
 
         choice = input("\nEnter Choice : ")
 
@@ -179,16 +181,19 @@ def report_menu():
             payment_report()
 
         elif choice == "4":
-            top_customers()
+            sales_summary()
 
         elif choice == "5":
-            total_revenue()
+         top_selling_items()
 
         elif choice == "6":
-            break
+            top_customers()
 
-        else:
-            print("Invalid Choice")
+        elif choice == "7":
+            total_revenue()
+
+        elif choice == "8":
+            break
 
 def main():
 

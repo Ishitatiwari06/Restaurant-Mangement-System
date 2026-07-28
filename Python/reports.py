@@ -170,17 +170,97 @@ def total_revenue():
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.callproc("GetTotalRevenue")
 
-    SELECT SUM(TotalAmount)
-    FROM Orders
+    for result in cursor.stored_results():
+        row = result.fetchone()
 
-    """)
-
-    revenue = cursor.fetchone()[0]
-
-    print("\nTotal Revenue :", revenue)
+    print(f"Total Revenue : ₹{row[0]}")
 
     cursor.close()
     conn.close()
 
+def sales_summary():
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM SalesSummary
+        ORDER BY SalesDate
+    """)
+
+    rows = cursor.fetchall()
+
+    print("\n" + "=" * 65)
+    print("                SALES SUMMARY")
+    print("=" * 65)
+
+    print("{:<15}{:<15}{}".format(
+        "Date",
+        "Orders",
+        "Revenue"
+    ))
+
+    print("-" * 65)
+
+    for row in rows:
+
+        print("{:<15}{:<15}₹{}".format(
+            str(row[0]),
+            row[1],
+            row[2]
+        ))
+
+    cursor.close()
+    conn.close()
+
+def top_selling_items():
+
+    conn = None
+    cursor = None
+
+    try:
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Call Stored Procedure
+        cursor.callproc("GetTopSellingItems")
+
+        print("\n" + "=" * 55)
+        print("            TOP 5 SELLING ITEMS")
+        print("=" * 55)
+
+        print("{:<5}{:<30}{}".format(
+            "No.",
+            "Item Name",
+            "Quantity Sold"
+        ))
+
+        print("-" * 55)
+
+        for result in cursor.stored_results():
+
+            rows = result.fetchall()
+
+            for i, row in enumerate(rows, start=1):
+
+                print("{:<5}{:<30}{}".format(
+                    i,
+                    row[0],
+                    row[1]
+                ))
+
+    except Exception as e:
+
+        print("Error :", e)
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
