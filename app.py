@@ -194,7 +194,10 @@ def build_dashboard(data: dict[str, pd.DataFrame]) -> None:
 			)
 			start_date, end_date = normalize_date_range(selected_range, min_date, max_date)
 
-		status_options = sorted([value for value in orders["Status"].dropna().unique().tolist()])
+		status_options = ["Pending", "Completed"]
+		for value in orders["Status"].dropna().unique().tolist():
+			if value not in status_options:
+				status_options.append(value)
 		status_filter = st.multiselect(
 			"Order status",
 			options=status_options,
