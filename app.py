@@ -10,6 +10,22 @@ import streamlit as st
 ROOT_DIR = Path(__file__).resolve().parent
 
 
+def ensure_key_column(frame: pd.DataFrame, preferred_name: str, legacy_names: list[str] | None = None) -> pd.DataFrame:
+	legacy_names = legacy_names or []
+	result = frame.copy()
+
+	if preferred_name in result.columns:
+		return result
+
+	for legacy_name in legacy_names:
+		if legacy_name in result.columns:
+			result = result.rename(columns={legacy_name: preferred_name})
+			return result
+
+	result.insert(0, preferred_name, range(1, len(result) + 1))
+	return result
+
+
 st.set_page_config(
 	page_title="Restaurant Analytics",
 	page_icon="🍽️",
@@ -42,6 +58,15 @@ def load_data() -> dict[str, pd.DataFrame]:
 	payments = pd.read_csv(data_path / "Payments.csv")
 	categories = pd.read_csv(data_path / "Categories.csv")
 	tables = pd.read_csv(data_path / "RestaurantTables.csv")
+
+	customers = ensure_key_column(customers, "CustomerID")
+	employees = ensure_key_column(employees, "EmployeeID")
+	menu = ensure_key_column(menu, "ItemID", ["MenuItemID"])
+	categories = ensure_key_column(categories, "CategoryID", ["CategorieID"])
+	tables = ensure_key_column(tables, "TableID", ["RestaurantTableID"])
+	orders = ensure_key_column(orders, "OrderID")
+	order_details = ensure_key_column(order_details, "DetailID")
+	payments = ensure_key_column(payments, "PaymentID")
 
 	orders["OrderDate"] = pd.to_datetime(orders["OrderDate"], errors="coerce")
 	payments["PaymentDate"] = pd.to_datetime(payments["PaymentDate"], errors="coerce")
