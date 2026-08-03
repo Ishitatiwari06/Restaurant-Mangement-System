@@ -16,16 +16,21 @@ if PYTHON_DIR.exists() and str(PYTHON_DIR) not in sys.path:
 	sys.path.insert(0, str(PYTHON_DIR))
 
 try:
-	from db import get_connection
+	from Python.db import get_connection, get_database_config
 except Exception:
+	def get_database_config() -> dict[str, object]:
+		import os
+
+		return {
+			"host": os.getenv("MYSQL_HOST", "localhost"),
+			"port": int(os.getenv("MYSQL_PORT", "3306")),
+			"user": os.getenv("MYSQL_USER", "root"),
+			"password": os.getenv("MYSQL_PASSWORD", "root"),
+			"database": os.getenv("MYSQL_DATABASE", "RestaurantDB"),
+		}
 
 	def get_connection():
-		return mysql.connector.connect(
-			host="localhost",
-			user="root",
-			password="root",
-			database="RestaurantDB",
-		)
+		return mysql.connector.connect(**get_database_config())
 
 
 st.set_page_config(
@@ -450,10 +455,20 @@ def build_dashboard(data: dict[str, pd.DataFrame]) -> None:
 def main() -> None:
 	try:
 		data = load_data()
-	except Exception as error:
+	except mysql.connector.Error as error:
 		st.title("Restaurant Analytics Dashboard")
 		st.error(f"Unable to load data from MySQL: {error}")
-		st.info("Check that MySQL is running and that the RestaurantDB schema has been created.")
+		config = get_database_config()
+		st.info(
+			"""
+			Check that MySQL is running, the `RestaurantDB` schema exists, and the connection settings are correct.
+			The app is currently trying: host={host}, port={port}, database={database}, user={user}
+			""".strip().format(**config)
+		)
+		return
+	except Exception as error:
+		st.title("Restaurant Analytics Dashboard")
+		st.error(f"Unable to load data: {error}")
 		return
 
 	build_dashboard(data)
