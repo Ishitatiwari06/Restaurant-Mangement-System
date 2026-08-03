@@ -1,5 +1,5 @@
-CategoryName
-Starter
-Main Course
-Dessert
-Beverage
+CategoryID,CategoryName
+1,Starter
+2,Main Course
+3,Dessert
+4,Beverage

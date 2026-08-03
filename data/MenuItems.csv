@@ -1,31 +1,31 @@
-ItemName,CategoryID,Price,Availability
-Spring Rolls,1,180,Available
-Paneer Tikka,1,250,Available
-French Fries,1,120,Available
-Veg Manchurian,1,220,Available
-Garlic Bread,1,150,Available
-Paneer Butter Masala,2,320,Available
-Dal Makhani,2,280,Available
-Veg Biryani,2,300,Available
-Chicken Biryani,2,380,Available
-Butter Naan,2,60,Available
-Jeera Rice,2,180,Available
-Fried Rice,2,220,Available
-Hakka Noodles,2,240,Available
-Veg Pizza,2,350,Available
-Chicken Pizza,2,450,Available
-Ice Cream,3,120,Available
-Brownie,3,180,Available
-Gulab Jamun,3,100,Available
-Rasmalai,3,140,Available
-Chocolate Cake,3,220,Available
-Coke,4,60,Available
-Pepsi,4,60,Available
-Lassi,4,90,Available
-Cold Coffee,4,150,Available
-Mango Shake,4,170,Available
-Lemon Soda,4,80,Available
-Orange Juice,4,120,Available
-Mineral Water,4,40,Available
-Tea,4,40,Available
-Coffee,4,70,Available
+ItemID,ItemName,CategoryID,Price,Availability
+1,Spring Rolls,1,180,Available
+2,Paneer Tikka,1,250,Available
+3,French Fries,1,120,Available
+4,Veg Manchurian,1,220,Available
+5,Garlic Bread,1,150,Available
+6,Paneer Butter Masala,2,320,Available
+7,Dal Makhani,2,280,Available
+8,Veg Biryani,2,300,Available
+9,Chicken Biryani,2,380,Available
+10,Butter Naan,2,60,Available
+11,Jeera Rice,2,180,Available
+12,Fried Rice,2,220,Available
+13,Hakka Noodles,2,240,Available
+14,Veg Pizza,2,350,Available
+15,Chicken Pizza,2,450,Available
+16,Ice Cream,3,120,Available
+17,Brownie,3,180,Available
+18,Gulab Jamun,3,100,Available
+19,Rasmalai,3,140,Available
+20,Chocolate Cake,3,220,Available
+21,Coke,4,60,Available
+22,Pepsi,4,60,Available
+23,Lassi,4,90,Available
+24,Cold Coffee,4,150,Available
+25,Mango Shake,4,170,Available
+26,Lemon Soda,4,80,Available
+27,Orange Juice,4,120,Available
+28,Mineral Water,4,40,Available
+29,Tea,4,40,Available
+30,Coffee,4,70,Available

@@ -225,6 +225,12 @@ Export these tables to CSV and place them in the `data/` folder:
 
 The dashboard reads these files directly, so MySQL does not need to be running for analytics.
 
+You can regenerate the CSVs from the bundled SQL seed data with:
+
+```bash
+python export_csv_data.py
+```
+
 ---
 
 ## 4. Run Application
