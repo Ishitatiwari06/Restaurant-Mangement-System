@@ -1,36 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
-import sys
 
 import matplotlib.pyplot as plt
-import mysql.connector
 import pandas as pd
 import streamlit as st
 
 
 ROOT_DIR = Path(__file__).resolve().parent
-PYTHON_DIR = ROOT_DIR / "Python"
-
-if PYTHON_DIR.exists() and str(PYTHON_DIR) not in sys.path:
-	sys.path.insert(0, str(PYTHON_DIR))
-
-try:
-	from Python.db import get_connection, get_database_config
-except Exception:
-	def get_database_config() -> dict[str, object]:
-		import os
-
-		return {
-			"host": os.getenv("MYSQL_HOST", "localhost"),
-			"port": int(os.getenv("MYSQL_PORT", "3306")),
-			"user": os.getenv("MYSQL_USER", "root"),
-			"password": os.getenv("MYSQL_PASSWORD", "root"),
-			"database": os.getenv("MYSQL_DATABASE", "RestaurantDB"),
-		}
-
-	def get_connection():
-		return mysql.connector.connect(**get_database_config())
 
 
 st.set_page_config(
@@ -55,28 +32,16 @@ st.markdown(
 
 @st.cache_data(show_spinner=False)
 def load_data() -> dict[str, pd.DataFrame]:
-	connection = get_connection()
-	try:
-		def read_table(query: str) -> pd.DataFrame:
-			cursor = connection.cursor()
-			try:
-				cursor.execute(query)
-				rows = cursor.fetchall()
-				columns = [column[0] for column in cursor.description or []]
-			finally:
-				cursor.close()
-			return pd.DataFrame(rows, columns=columns)
+	data_path = ROOT_DIR / "data"
 
-		customers = read_table("SELECT * FROM Customers")
-		employees = read_table("SELECT * FROM Employees")
-		menu = read_table("SELECT * FROM MenuItems")
-		orders = read_table("SELECT * FROM Orders")
-		order_details = read_table("SELECT * FROM OrderDetails")
-		payments = read_table("SELECT * FROM Payments")
-		categories = read_table("SELECT * FROM Categories")
-		tables = read_table("SELECT * FROM RestaurantTables")
-	finally:
-		connection.close()
+	customers = pd.read_csv(data_path / "Customers.csv")
+	employees = pd.read_csv(data_path / "Employees.csv")
+	menu = pd.read_csv(data_path / "MenuItems.csv")
+	orders = pd.read_csv(data_path / "Orders.csv")
+	order_details = pd.read_csv(data_path / "OrderDetails.csv")
+	payments = pd.read_csv(data_path / "Payments.csv")
+	categories = pd.read_csv(data_path / "Categories.csv")
+	tables = pd.read_csv(data_path / "RestaurantTables.csv")
 
 	orders["OrderDate"] = pd.to_datetime(orders["OrderDate"], errors="coerce")
 	payments["PaymentDate"] = pd.to_datetime(payments["PaymentDate"], errors="coerce")
@@ -455,16 +420,10 @@ def build_dashboard(data: dict[str, pd.DataFrame]) -> None:
 def main() -> None:
 	try:
 		data = load_data()
-	except mysql.connector.Error as error:
+	except FileNotFoundError as error:
 		st.title("Restaurant Analytics Dashboard")
-		st.error(f"Unable to load data from MySQL: {error}")
-		config = get_database_config()
-		st.info(
-			"""
-			Check that MySQL is running, the `RestaurantDB` schema exists, and the connection settings are correct.
-			The app is currently trying: host={host}, port={port}, database={database}, user={user}
-			""".strip().format(**config)
-		)
+		st.error(f"Unable to load CSV data: {error}")
+		st.info("Create the data/ folder and export the required tables as CSV files.")
 		return
 	except Exception as error:
 		st.title("Restaurant Analytics Dashboard")

@@ -8,7 +8,7 @@ A Restaurant Management System developed using **Python** and **MySQL** to manag
 
 The Restaurant Management System is designed to simplify restaurant operations by maintaining customer records, managing menu items, processing orders, handling payments, and generating reports. It demonstrates CRUD operations, SQL concepts, and Python database connectivity.
 
-The project also includes an analytics notebook that visualizes restaurant data and helps understand sales trends, customer behavior, employee performance, and menu popularity.
+The project also includes an analytics dashboard that visualizes restaurant data and helps understand sales trends, customer behavior, employee performance, and menu popularity.
 
 ---
 
@@ -56,7 +56,8 @@ The project also includes an analytics notebook that visualizes restaurant data 
 - Python 3.x
 
 ### Database
-- MySQL
+- MySQL for the CRUD scripts and SQL seed files
+- CSV files for the analytics dashboard
 
 ### Python Libraries
 - mysql-connector-python
@@ -111,6 +112,16 @@ Restaurant-Management-System/
 │
 ├── Notebook/
 │   └── analysis.ipynb
+│
+├── data/
+│   ├── Customers.csv
+│   ├── Employees.csv
+│   ├── MenuItems.csv
+│   ├── Orders.csv
+│   ├── OrderDetails.csv
+│   ├── Payments.csv
+│   ├── Categories.csv
+│   └── RestaurantTables.csv
 │
 ├── Screenshots/
 │
@@ -199,36 +210,24 @@ pip install -r requirements.txt
 
 ---
 
-## 3. Create Database
+## 3. Export Dashboard Data
 
-Open MySQL Workbench and execute:
+Export these tables to CSV and place them in the `data/` folder:
 
-```
-schema.sql
-```
+- Customers.csv
+- Employees.csv
+- MenuItems.csv
+- Orders.csv
+- OrderDetails.csv
+- Payments.csv
+- Categories.csv
+- RestaurantTables.csv
 
-Then execute:
-
-```
-insert_data.sql
-```
-
----
-
-## 4. Update Database Credentials
-
-Edit `db.py`
-
-```python
-host="localhost"
-user="root"
-password="your_password"
-database="RestaurantDB"
-```
+The dashboard reads these files directly, so MySQL does not need to be running for analytics.
 
 ---
 
-## 5. Run Application
+## 4. Run Application
 
 ```bash
 python main.py
@@ -236,7 +235,7 @@ python main.py
 
 ---
 
-## 6. Run Analysis Notebook
+## 5. Run Analysis Notebook
 
 Open:
 
