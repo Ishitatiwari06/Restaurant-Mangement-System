@@ -3,6 +3,7 @@
 A Restaurant Management System developed using **Python** and **MySQL** to manage customers, menu items, orders, payments, and business reports. The project also includes data analysis and visualization using **Pandas** and **Matplotlib** to provide meaningful business insights.
 
 ---
+## Live url - https://restaurantmangement.streamlit.app/
 
 ## 📖 Project Overview
 
