@@ -258,16 +258,31 @@ Run all cells.
 
 Add screenshots of:
 
-- Main Menu
-- Customer Module
-- Menu Module
-- Order Module
-- Payment Module
-- Reports
-- SQL Tables
-- Sales Dashboard
-- Revenue Charts
-- Top Customers Analysis
+## 📸 Project Screenshots
+
+### Dashboard Overview
+
+![Dashboard](screenshots/dashboard.png)
+
+### Sales Trends
+
+![Sales Trends](screenshots/sales_trends.png)
+
+### Customer Insights
+
+![Customer Insights](screenshots/customer_insights.png)
+
+### Operations Dashboard
+
+![Operations](screenshots/operations.png)
+
+### Data Preview
+
+![Data Preview](screenshots/data_preview.png)
+
+### Filters
+
+![Filters](screenshots/filters.png)
 
 ---
 
